@@ -1,9 +1,11 @@
 $(function() {
-  header = ["departure", "arrival", "duration", "stops", "fares"];
+  header = ["fares", "departure", "arrival", "stops", "", "duration"];
   console.log(header.join("\t"));
-  printable_result = header.join("\t");
+  // printable_result = header.join("\t");
+  
 
   $('button').click(function(){
+    printable_result = "";
     html = $($('#input').val());
     li = html.find('li');
     li.each(function(e){
@@ -13,7 +15,11 @@ $(function() {
       arrival = arrival.match("Arrives (.*)")[1];
       duration = $(this).find('.flight-stops--duration-time').text();
       stops = $(this).find('.flight-stops--duration').text();
-      stops = stops.match(/.*(\d)\sstops?/)[1]
+      try {
+        stops = stops.match(/.*(\d)\sstops?/)[1];
+      } catch(TypeError){
+        stops = 0;
+      }
       fare_els = $(this).find('.fare-button');
       fares = [];
       for(i=0; i<fare_els.length; i++){
@@ -34,9 +40,10 @@ $(function() {
     "fares": fares
   }
 
-  result = [departure, arrival, duration, stops, fares];
+  result = [fares, departure, arrival, stops, "", duration];
+  // header = ["fares", "departure", "arrival", "stops", "", "duration"];
   console.log(result.join("\t"));
-  printable_result += "\n" + result.join("\t");
+  printable_result += result.join("\t") + "\n";
 
   
 });
